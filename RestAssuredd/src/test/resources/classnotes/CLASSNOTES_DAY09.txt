@@ -1,0 +1,277 @@
+
+02/06/2022
+----------
+
+Api Day 9
+---------
+
+Recap practice task
+-------------------
+
+given accept type is json
+when I send get request to /countries
+Then status code is 200
+and content type is json
+and count should be 25
+and country ids should contain "AR,AU,BE,BR,CA"
+and country names should have "Argentina,Australia,Belgium,Brazil,Canada"
+
+package day09_post_put
+
+ORDSCountriesHamcrestTest
+=======================================================
+
+HAMCREST MACHERS:
+	-> library containing assertion matchers
+	-> it is very readable and easy to use for verifications
+
+2 Ways we can use Hamcrest while doing API automation with RestAssured:
+
+1) Chaining the assertions using RestAssured methods
+
+2) Store response and doing assertions using assertThat method and matchers
+
+----------
+
+1)
+given().accept(ContentType.JSON)
+    .when().get("/countries")
+    //response assertions/verification:
+    .then().assertThat().statusCode(200)
+    .and().contentType(ContentType.JSON)
+    .and().body("count", equalTo(25),
+            "items.country_id" , hasItems("AR", "AU", "BE", "BR", "CA") ,
+            "items.country_name" , hasItems("Argentina", "Australia", "Belgium", "Brazil", "Canada"))
+    .log().all();
+
+
+2) Response response = given().accept(ContentType.JSON)
+                .when().get("/countries");
+
+   assertThat(response.statusCode(), equalTo(200));
+   assertThat(response.contentType(), is("application/json"));
+   assertThat(response.path("count"), is(25));
+   assertThat(response.path("items.country_id"), hasItems("AR", "AU", "BE", "BR", "CA"));
+   assertThat(response.path("items.country_name"), hasItems("Argentina", "Australia", "Belgium", "Brazil", "Canada"));
+============================================================================
+
+Documentation: Swagger
+
+Summary of GET request:
+	REQUEST:
+		- API endpoint that works with GET request
+		- Headers (accept, credentials)
+		- parameters(path/url param. query param)
+
+	RESPONSE:
+		- status code(2XX - Success, 3XX - redirect, 4XX - client error,5XX- server/api error)
+		- headers (contentType, Data etc)
+		- json response body
+
+Verifying status codes and headers are straighforward, can use junit or hamcrest assertions.
+
+Verifying json response takes effort of reading the json and analyzing the structure of json.
+
+We have many options now, when it comes to verification of Json response:
+
+{
+	"language","java"
+}
+
+1) contains methods of String class: not recommended:
+
+	assertTrue(response.asString().contains("java"));
+
+2) path method:
+	assertEquals("java", response.path("language"));
+
+3) jsonPath:
+	JsonPath json = response.jsonPath();
+	assertEquals("java", json.getString("language"));
+
+	OR: assertEquals("java", response.jsonPath().getString("language"));
+
+4) DE-serialization to java collection. (json to java object)
+
+	Map<String, Object> resMap = response.as(Map.class);
+	assertEquals("java", resMap.get("language"));
+
+	Map<String, Object> expMap = new LinkedHashMap<>();
+	expMap.put("language","java");
+
+	assertEquals(expMap, resMap);
+
+5) DE-serialization to java POJO object. json > java object
+	Parser library working in background: Jackson
+
+	@Data //lombok -getter/setter etc
+	public class Tech {
+		private String language;
+	}
+
+	Tech tech = response.as(Tech.class);
+	assertEquals("java", tech.getLanguage());
+--------
+Hamcrest assertion:
+
+6) => chaining RestAssured methods and asserting in single statement using hamcrest matchers:
+	given().accept(ContentType.JSON)
+	.when().get("/test")
+	.then().assertThat().statusCode(200)
+	.and().contentType(ContentType.JSON)
+	.and().body("language",equalTo("java"));
+
+ => Store the response and use assertThat method with hacmrest matchers:
+
+ 	Response response = given().accept(ContentType.JSON)
+	.when().get("/test");
+
+	assertThat(response.statusCode(), is(200);
+	assertThat(response.contentType(), is("application/json");
+	assertThat(response.path("language"), is("java");
+====================================================================
+
+Gultakin Ibrahimova — Today at 11:25 AM
+@Murodil There is IQ:  What is the difference between assert and verify in selenium? We say either  assert or verify.
+
+when assert fails - test execution stops at that point, and the next test starts(if any)
+
+when verify fails - test execution does not stop and it runs till the end, then error is reported
+
+------------------------
+
+TESTNG:
+
+	assert -> assertEquals(4+2, 6);
+	verify -> softassertion:
+		SoftAssert softAssert = new SoftAssert();
+		softAssert.assertEquals(4+2, 6);
+		...
+		softAssert.assertAll(); report if any errors
+
+--> try catch could also be used to just report error and not stop execution.
+------------------------
+
+CRUD OPERATIONS:   API      SQL
+	C -> Create -> post   -> insert
+	R -> Read   -> get    -> select
+	U -> Update -> put    -> update
+	D -> Delete -> delete -> delete
+
+------------------------
+HTTP methods -> post, get, put, delete, patch(partial update)
+
+POST method of API:
+	REQUEST:
+		-> API Endpoint that works with POST method
+		-> Headers
+		-> Json body. containing data to be posted/added
+
+	RESPONSE:
+		-> status code 201 - created
+		-> headers
+		-> json body (containing values from request part)
+
+------------------------
+
+==============================
+
+{
+  "gender": "Male",
+  "name": "Teacher Request",
+  "phone": 2112562345
+}
+
+/api/spartans
+
+
+given accept is json
+and content type is json
+when I send POST request to /api/spartans
+with {
+  "gender": "Male",
+  "name": "Teacher Request",
+  "phone": 2112562345
+}
+Then status code is 201
+And "spartan is born" message should be displayed
+===================================================
+
+POST request:
+	-> POST api url /api/spartans
+	-> headers -> accept, contentType
+	-> request json body:
+		{
+		  "gender": "Male",
+		  "name": "RestAssured Post",
+		  "phone": 2115552345
+		}
+   RESPONSE:
+   		-> status code 201
+   		-> headers
+   		-> response json body
+
+===================================================
+
+Gultakin Ibrahimova — Today at 2:18 PM
+@Murodil  will we create  a future file for API testing separately? Since our framework is Cucumber BDD and we are saying we are testing all 3 layers of app-n.
+
+We add feature files and step definitions for API tests in cucumber project seperately.
+If scenario steps are going over UI and API, then feature file includes both steps.
+
+===================================================
+
+When we are doing post request, we always include json request body, it will contain data that we want to post using API.
+
+When doing automation, RestAssured allows several ways of passing json request body.
+
+1) as a String
+
+    String requestJson = "{\"gender\": \"Male\",\n" +
+                                "\"name\": \"RestAssuredPost\",\n" +
+                                "\"phone\": 2115552345}";
+
+     Response response = given().accept(ContentType.JSON)
+                .and().contentType(ContentType.JSON)
+                .and().body(requestJson)
+                .when().post("/api/spartans");
+
+2) using a map.
+
+	SERIALIZATION > converting java object to Json.
+	In below example, body() method is automatically converting java map object
+	to json.
+
+	Map<String, Object> requestMap = new LinkedHashMap<>();
+	requestMap.put("gender", "Female");
+	requestMap.put("name","TestMapPost");
+	requestMap.put("phone", 3211235432L);
+
+     Response response = given().accept(ContentType.JSON)
+                .and().contentType(ContentType.JSON)
+                .and().body(requestMap) //automatically convert map object to json
+                .when().post("/api/spartans");
+
+POST request headers:
+	accept(ContentType.JSON) => Hey api, I only except json response
+	contentType(ContentType.JSON) => Hey api, I am sending you json value
+
+
+3) Using a POJO: we can create object of pojo class that matches the request json and assign values then pass to request.
+It will automatically Convert to Json (SERIALIZE).
+
+Spartan reqSpartan = new Spartan();
+reqSpartan.setName("POJOpost");
+reqSpartan.setGender("Female");
+reqSpartan.setPhone(9877891234L);
+
+Response response = given().accept(ContentType.JSON)
+        .and().contentType(ContentType.JSON)
+        .and().body(reqSpartan) //automatically convert spartan object to json
+        .when().post("/api/spartans");
+===========================================
+
+The same approach will work for PUT request as well, that we will quickly go over next class.
+
+Tuesday/Wed/Thur -> office hours : 4:30 PM -> practice recent API topics
+				 -> class 7 PM -> API topics
