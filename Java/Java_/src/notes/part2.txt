@@ -1,0 +1,318 @@
+23 May 2022
+Java Boot Camp
+	
+	Topics:
+	    16. OOP Encapsulations
+		17. OOP Inheritance
+		18. Is A vs Has A
+		19. Method Overriding
+		20. Final keyword
+		21. OOP Abstraction
+		22. Abstract Class vs Interface
+		23. OOP Polymorphism
+		24. Reference Type Castings: Upcasting vs DownCasting
+		25. Exceptions: checked & unchecked
+		26. Exception Handlings
+		27. final vs finally vs finalize
+		28. garbage collection & garbage collector
+		29. Collections: List, Set, Queue
+		30. Iterable & Iterator
+		31. Maps
+
+
+
+
+
+
+
+
+
+
+
+
+16. OOP: Object Oriented Programming
+		code reusability
+		centralized structure
+		easy to maintain
+		less duplication
+		less memory usage
+		clean
+
+	Encapsulation: data hiding by giving private AM
+				   use public getter/setter to read/write the private data
+
+				   getter: read ONLY
+				   setter: write ONLY
+
+17. Inheritance: Building IS A relation (parent & child) between classes
+			
+			Class X  extends  Class Y
+				 sub				super
+
+			Class Z extends Class Y
+				  sub			 super
+
+
+		  sub class: can inherit all the visible variables & methods from super class
+
+		  super class: can not inherit anything from sub class
+
+		  A class can only extend one class
+
+		  A class can be extended by multiple classes
+
+
+	    TestBase
+			  driver
+
+			@BeforeMethod  {
+			  open the browser
+			  maximize the Browser
+			  use implicit wait
+			  navigate to URL
+			  }
+
+
+	    TestClass1 extends TestBase
+
+	    TestClass2 extends TestBase
+
+	    TestClass3 extends TestBase
+
+    	=================
+
+    	BasePage class
+    		constructor(BasePage)(){
+    			PageFactory.initElement(driver, this )
+    		}
+
+    	other pages extends BasePage:
+
+    		@FindBy(xpath = "")
+    		WebElement name;
+
+
+	CarTask
+			ElectricCar:
+				charging()
+
+			LuxuryCar
+				massage();
+				seatHeater();
+				seatCooler();
+
+
+			Abstract Car
+				make, model, color, year, price..
+				drive(), toString()
+				start();
+
+
+			Toyota extends Car
+
+			Honda extends Car
+
+			Mercedes extends Car implements LuxuryCar
+
+			BMW extends Car implements LuxuryCar
+
+			Tesla extends Car implements LuxuryCar, ElectricCar
+
+
+
+
+18. Is A relation VS Has A relation
+
+		Is A relation: if the classes are in inheritance relation
+			class Car{
+
+			}
+
+			class Toyota extends Car{     Toyota Is A Car
+
+			}
+
+
+		Has A relation: if the class is used in another class that does not have Is A relation
+
+			ParkingLot{     ParkingLot Has A Toyota
+				Toyota
+				Car
+
+			}
+
+
+19. Method Overriding: giving different implementation to the method
+
+						MUST happen in subclass
+
+						returnType, methodName, Parameters MUST be same
+
+						Access modifier MUST be same or more visible
+
+						we cannot override:
+								final, private, static
+
+
+
+20. Final keyword: unchangeable
+
+			variables: can not be reassigned
+
+			methods: cannot be overridden
+
+			class: cannot be inherited
+
+
+
+21. Abstraction: hiding the implementation details
+				 focus on essentials without worrying about small details
+
+
+				 Abstract method: method without the body
+				 				  meant to be overridden (can not be final, private, static)
+
+				2 ways:
+					1. abstract class: meant to be super class (can not be final)
+									  can not create object
+
+									  abstract class can have all the methods & variables of regular class can have
+                        ex:
+                        Selenium-   BasePage,TestBase
+
+
+					2. interface: blueprint of the class, meant to be implemented (cannot final)
+									public is the only access modifier
+									cannot create object
+
+
+						ex:
+						Selenium-	WebDriver, WebElement, JavaScritpExecuter, TakeScreenShot...
+						Database-	Connection, Statement, ResultSet...
+						API-		Response, RequestSpecification, ResponseSpecification...
+
+
+22. abstract class vs interface:
+			
+			- one class can extend one abstract class only
+			- one class implement multiple interface
+			- one interface can extend multiple interfaces
+
+
+
+23. Polymorphism: ability of the object taking on many forms
+				
+				parent being referenced to child objects
+
+				reference type decides which are accessible
+
+				object type decides which implementation to be executed
+
+		Driver
+			WebDriver getDriver(browserName){
+
+			}
+
+
+		WebDriver driver;
+		( (TakeScreenShot)driver ).takeScrenShot
+		( (JavaScriptExecuter)driver ).executeScript
+
+        ex:
+		List list=new ArrayList();
+		List list=new LinkedList();
+		Set set=new HashSet();
+		Set set=new TreeSet();
+
+
+
+24. Reference type casting:
+TakeScreenShot screen=new ChromeDriver();
+
+((WebDriver)screen).get("https://www.google.com");
+
+
+WebDriver driver=new ChromeDriver();
+TakeScreenShot screen=(TakeScreenShot)driver;
+screen.takeScrenShot();
+			
+			up casting: casting the smaller type to larger type (automatically done)
+
+			down casting: casting the larger type to smaller type (manually done)
+
+
+
+25. Exceptions: checked or unchecked
+		
+		unchecked exception: occurs during the runtime
+
+		checked exception: occurs during compile time
+
+	throw: used for manually throw exception
+
+
+26. Exception handling ways:
+
+			1. try & catch blocks: can handle unchecked & checked
+
+					try{
+						exception codes
+					}catch(ExceptionType){
+						e.printstackTrace()	
+					}
+
+			2. throws: can handle checked exception. used within the method signature
+
+
+
+27. final vs finally vs finalize:
+		
+		final: keyword
+
+		finally: block
+
+		finalize: method
+
+
+
+29. Collection: size is dynamic. only supports non-primitives
+		
+		List (I): accepts duplicates, has index
+
+			ArrayList (C): Array based class. retrieving the data is faster ( get() )
+
+			LinkedList (C): doubly linked. adding & removing are faster
+
+			Vector (C): synchronized ===> thread-safe
+
+			Stack (C): synchronized ===> thread-safe. LIFO ( pop() )
+
+
+		Set (I): does not accept duplicates, does not have index
+
+			HashSet (C): order is not guaranteed
+
+			LinkedHashSet (C): keeps the insertion order
+
+			TreeSet (C): ascending order. 
+
+
+		Queue (I): accepts duplicates, does not have index. FIFO ( poll() )
+				
+
+
+30. Map (I): key & value. key cannot be duplicated. dynamic sized. no index
+		
+		HashMap (C): order is random, accepts null
+
+		LinkedHashMap (C): insertion order is kept as it is. accepts null
+
+		HashTable (C): order is random, does not accepts null. synchronized==> thread-safe
+
+		TreeMap (C): ascending order, does not accept null
+
+
+
+
+
+

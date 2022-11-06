@@ -1,0 +1,172 @@
+23 May 2022
+Java Boot Camp
+	
+	Topics:
+		1.  Primitives: int, double, char, boolean
+		2.  Primitive Type Castings: Implicit vs Explicit
+		3.  Wrapper class
+		4.  String
+		5.  String vs StringBuilder vs StringBuffer
+		6.  Loops: for & while
+		7.  Array
+		8.  for each loop
+		9.  Custom Methods
+		10. Method Overloading
+		11. Constructor
+		12. Class & Objects
+		13. Static vs Instance
+		14. Import Statements
+		15. Access Modifiers
+
+
+1. Primitives:
+		byte < short < int < long < float < double
+		char, boolean
+
+2. Primitive Type Castings: Implicit vs Explicit
+		implicit casting: casting smaller type to larger
+
+		explicit casting: casting larger type to smaller type
+
+
+3. Wrapper class: the objects that represents the primitives
+			
+			Byte, Short, Integer, Long, Float, Double, Character, Boolean
+
+
+4. String: immutable version of char sequences
+			
+			"Java"
+			 0123
+
+		 Methods: charAt, length, lowerCase & upperCase, substring, equals, contains, startsWith, endsWith, split, toCharArray
+
+
+5. StringBuilder & StringBuffer: mutable version of char sequences
+		
+		StringBuilder: not synchronized
+
+		StringBuffer: synchronized
+
+
+	synchronized: thread-safe ===> one thread at a time
+				  disadvantage: slow
+
+	thread: sub-sequence of process
+
+	process:  application
+
+
+6. Loops: repeated action
+
+		for loop:
+			for(initialization; Conidition; Iterator){
+				statements
+			}
+
+
+		while loop:
+
+			while(condition){
+				statements
+			}
+
+
+		do-while loop:
+                do{
+                    statements
+                }while(condition);
+
+7. Array: fixed size
+		  supports primitives & non primitives
+		  can be multidimensional
+		  has index
+
+
+8. For Each loop: MUST be applied to data structures
+				number of repeating depends on the number data in the data structure
+				Iteration order is FIXED
+
+
+9. Custom Methods: function.
+				   grouping A SERIES OF CODE FRAGMENTS
+
+				   improves the reusability of the codes
+
+		   declare:
+		   		AM  specifier  returnType  methodName (Parameter){
+
+		   		}
+
+	   			AM: public, protected, default, private
+	   			specifiers: static, final, abstract, synchronized, default(only in interface)
+	   			returnType: void, DataType
+	   			Parameter: DataType
+	   			methodName: anyName
+
+
+
+10. Method Overloading (Static Polymorphism): multiple methods sharing the same method name
+						method name MUST be same and Parameter MUST be different
+
+
+11. Constructor: special method that every class MUST have
+				 used for creating objects from the class
+				 execution depends on the object
+
+			 declare:
+			 	AM  ClassName(Parameter){
+
+			 	} 
+
+		 	Object:
+		 		new Constructor
+
+
+ 		BasePage:
+ 			public BasePage(){
+ 				PageFactory.initElements(Driver.get(), this);
+ 			}
+
+ 			@FindBy
+
+
+12. Class & Object: class is a template of objects, where the objects are come from
+					Object is an instance of the class. object is REAL
+					each object has its own memory
+
+
+13. Static vs Instance:
+			static: belongs to the class. there is ONLY one copy for all objects
+			instance: belongs to the object. there are multiple copies. each objects has its own copy
+
+
+14. Import Statements:
+			regular import:
+				import packageNames.ClassName;
+
+			static import: used for importing static variables & method ONLY
+				import static packageNames.ClassName.staticMember;
+
+
+15. Access Modifiers:   private < default < protected < public
+
+
+
+
+				
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
